@@ -17,8 +17,7 @@ It is created mainly for **interview preparation**, **practice**, and **concept 
 ## 🛠 Tech Stack
 
 - **Node.js**
-- **Express.js**
-- **NestJS (in separate module/folder)**
+- **NestJS**
 - **MongoDB**
 - **MySQL**
 - **TypeScript**
