@@ -1,13 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { AuthStrategy } from 'src/design-patterns/strategy/auth.strategy';
 
 @Injectable()
 export class AuthService {
     private users: any[] = [];
 
     constructor(private readonly jwtService:JwtService){
-
+        const authStrategy = new AuthStrategy();
+        console.log(authStrategy.execute('email',{email:'abc@gmail.com'}));
+        console.log(authStrategy.execute('otp',{phone:'9911991199'}));
+        
     }
 
     async register(registerDto: any){
