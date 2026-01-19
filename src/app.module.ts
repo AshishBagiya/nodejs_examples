@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { MySqlModule } from './database/mysql/mysql.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
+import { RedisModule } from './database/redis/redis.module';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { OrderModule } from './modules/order/order.module';
       isGlobal: true,
       load: config,
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
-    }), AuthModule, MongoModule, UsersModule, MySqlModule, ProductModule, OrderModule
+    }), AuthModule, MongoModule, UsersModule, MySqlModule, ProductModule, OrderModule, RedisModule
   ],
   controllers: [AppController],
   providers: [AppService],
