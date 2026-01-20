@@ -6,13 +6,18 @@ import { ConfigService } from "@nestjs/config";
     {
         imports:[CacheModule.registerAsync({
             inject:[ConfigService],
-            useFactory:(config:ConfigService)=>({
-                stores:new KeyvRedis({
-                    host:config.get('REDIS_HOST'),
-                    port:config.get('REDIS_PORT'),
-                }),
-                ttl:60*1000,
-            }),
+            useFactory:(config:ConfigService)=>{
+                const host = config.get<string>('REDIS_HOST');
+                const port = config.get<number>('REDIS_PORT');
+
+                const url = `redis://${host ?? '127.0.0.1'}:${port ?? 6379}`;
+
+                return {
+                    // CacheModule expects a single store, not "stores"
+                    store: new KeyvRedis(url),
+                    ttl:60*1000,
+                };
+            },
             isGlobal:true
         })]
     }
