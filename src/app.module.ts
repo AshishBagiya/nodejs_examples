@@ -10,6 +10,7 @@ import { MySqlModule } from './database/mysql/mysql.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { RedisModule } from './database/redis/redis.module';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { RedisModule } from './database/redis/redis.module';
       isGlobal: true,
       load: config,
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
-    }), AuthModule, MongoModule, UsersModule, MySqlModule, ProductModule, OrderModule, RedisModule
+    }), AuthModule, MongoModule, UsersModule, MySqlModule, ProductModule, OrderModule, RedisModule, QueueModule
   ],
   controllers: [AppController],
   providers: [AppService],

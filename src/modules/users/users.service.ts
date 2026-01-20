@@ -1,21 +1,26 @@
+import { InjectQueue } from '@nestjs/bullmq';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Queue } from 'bullmq';
+import type { Cache } from 'cache-manager';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { QueryUserDto } from './dto/query-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import type {Cache} from 'cache-manager';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectModel(User.name) private userModel:Model<UserDocument>,
         @Inject(CACHE_MANAGER) private cacheManager:Cache,
+        @InjectQueue('email-queue') private readonly emailQueue:Queue,
     ){}
 
     async create(dto:CreateUserDto){
-        return this.userModel.create(dto);
+        const result = this.userModel.create(dto);
+        await this.emailQueue.add('send-welcome-email',{email:dto.email,role:dto?.role},{attempts:3,backoff:{type:'exponential',delay:2000}});
+        return result;
     }
 
     async findAll(query:QueryUserDto){
